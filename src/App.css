@@ -1,0 +1,22 @@
+.section {
+  height: 33.333333vh;
+  text-align: center;
+  line-height: 33vh;
+  font-size: 64px;
+  cursor: pointer;
+}
+
+.pee {
+  background-color: #FFE713;
+  color: #887B0B;
+}
+
+.poo {
+  background-color: #803E0E;
+  color: #E5711E;
+}
+
+.eat {
+  background-color: #1DB375;
+  color: #106140;
+}
