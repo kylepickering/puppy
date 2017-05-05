@@ -67,27 +67,31 @@ class App extends Component {
   }
 
   handleResetTimer(typeTime) {
-    const now = moment().utc();
+    if (confirm('Reset the timer?')) {
+      const now = moment().utc();
 
-    if (typeTime === 'lastPeeTime') {
-      this.setState({
-        lastPeeTime: now,
-      });
-      localStorage.setItem('lastPeeTime', now);
-    }
+      if (typeTime === 'lastPeeTime') {
+        this.setState({
+          lastPeeTime: now,
+        });
+        localStorage.setItem('lastPeeTime', now);
+      }
 
-    if (typeTime === 'lastPooTime') {
-      this.setState({
-        lastPooTime: now,
-      });
-      localStorage.setItem('lastPooTime', now);
-    }
+      if (typeTime === 'lastPooTime') {
+        this.setState({
+          lastPooTime: now,
+        });
+        localStorage.setItem('lastPooTime', now);
+      }
 
-    if (typeTime === 'lastEatTime') {
-      this.setState({
-        lastEatTime: now,
-      });
-      localStorage.setItem('lastEatTime', now);
+      if (typeTime === 'lastEatTime') {
+        this.setState({
+          lastEatTime: now,
+        });
+        localStorage.setItem('lastEatTime', now);
+      }
+    } else {
+      return false;
     }
   }
 
