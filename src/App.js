@@ -10,6 +10,7 @@ class App extends Component {
 
     this.updateTimers = this.updateTimers.bind(this);
     this.handleResetTimer = this.handleResetTimer.bind(this);
+    this.showHelperText = this.showHelperText.bind(this);
 
     this.state = {
       lastPeeTime: null,
@@ -18,6 +19,9 @@ class App extends Component {
       peeTimeElapsed: null,
       pooTimeElapsed: null,
       eatTimeElapsed: null,
+      peeHelperText: false,
+      pooHelperText: false,
+      eatHelperText: false,
     };
   }
 
@@ -67,53 +71,93 @@ class App extends Component {
   }
 
   handleResetTimer(typeTime) {
-    if (confirm('Reset the timer?')) {
-      const now = moment().utc();
+    const now = moment().utc();
 
-      if (typeTime === 'lastPeeTime') {
-        this.setState({
-          lastPeeTime: now,
-        });
-        localStorage.setItem('lastPeeTime', now);
-      }
+    if (typeTime === 'lastPeeTime') {
+      this.setState({
+        lastPeeTime: now,
+      });
+      localStorage.setItem('lastPeeTime', now);
+    }
 
-      if (typeTime === 'lastPooTime') {
-        this.setState({
-          lastPooTime: now,
-        });
-        localStorage.setItem('lastPooTime', now);
-      }
+    if (typeTime === 'lastPooTime') {
+      this.setState({
+        lastPooTime: now,
+      });
+      localStorage.setItem('lastPooTime', now);
+    }
 
-      if (typeTime === 'lastEatTime') {
-        this.setState({
-          lastEatTime: now,
-        });
-        localStorage.setItem('lastEatTime', now);
-      }
-    } else {
-      return false;
+    if (typeTime === 'lastEatTime') {
+      this.setState({
+        lastEatTime: now,
+      });
+      localStorage.setItem('lastEatTime', now);
+    }
+  }
+
+  renderHelperText() {
+    return (
+      <div className="smallText">👆DOUBLE TAP TO RESET TIMER👆</div>
+    )
+  }
+
+  showHelperText(section) {
+    if (section === 'pee') {
+      this.setState({ peeHelperText: true });
+      setTimeout(() => {this.setState({peeHelperText: false})}, 2000)
+    }
+
+    if (section === 'poo') {
+      this.setState({ pooHelperText: true });
+      setTimeout(() => {this.setState({pooHelperText: false})}, 2000)
+    }
+
+    if (section === 'eat') {
+      this.setState({ eatHelperText: true });
+      setTimeout(() => {this.setState({eatHelperText: false})}, 2000)
     }
   }
 
   render() {
     return (
       <div className="Puppy">
-        <div onClick={() => this.handleResetTimer('lastPeeTime')} className="section pee">
+        <div
+          onClick={() => this.showHelperText('pee')}
+          onDoubleClick={() => this.handleResetTimer('lastPeeTime')}
+          className="section pee"
+        >
           <span>💦 </span>
           { this.state.peeTimeElapsed &&
             this.state.peeTimeElapsed.format('HH:mm:ss')
           }
+          {this.state.peeHelperText &&
+            this.renderHelperText()
+          }
         </div>
-        <div onClick={() => this.handleResetTimer('lastPooTime')} className="section poo">
+        <div
+          onClick={() => this.showHelperText('poo')}
+          onDoubleClick={() => this.handleResetTimer('lastPooTime')}
+          className="section poo"
+        >
           <span>💩 </span>
           { this.state.pooTimeElapsed &&
             this.state.pooTimeElapsed.format('HH:mm:ss')
           }
+          {this.state.pooHelperText &&
+            this.renderHelperText()
+          }
         </div>
-        <div onClick={() => this.handleResetTimer('lastEatTime')} className="section eat">
+        <div
+          onClick={() => this.showHelperText('eat')}
+          onDoubleClick={() => this.handleResetTimer('lastEatTime')}
+          className="section eat"
+        >
           <span>🍜 </span>
           { this.state.eatTimeElapsed &&
             this.state.eatTimeElapsed.format('HH:mm:ss')
+          }
+          {this.state.eatHelperText &&
+            this.renderHelperText()
           }
         </div>
       </div>

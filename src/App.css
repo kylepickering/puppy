@@ -20,3 +20,10 @@
   background-color: #1DB375;
   color: #106140;
 }
+
+.smallText {
+  font-size: 14px;
+  line-height: 19px;
+  position: relative;
+  margin-top: -30px;
+}
