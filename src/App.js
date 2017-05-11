@@ -10,7 +10,8 @@ class App extends Component {
 
     this.updateTimers = this.updateTimers.bind(this);
     this.handleResetTimer = this.handleResetTimer.bind(this);
-    this.showHelperText = this.showHelperText.bind(this);
+    this.handleTimerClick = this.handleTimerClick.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
 
     this.state = {
       lastPeeTime: null,
@@ -19,9 +20,12 @@ class App extends Component {
       peeTimeElapsed: null,
       pooTimeElapsed: null,
       eatTimeElapsed: null,
-      peeHelperText: false,
-      pooHelperText: false,
-      eatHelperText: false,
+      showPeeDialog: false,
+      showPooDialog: false,
+      showEatDialog: false,
+      peeHistory: [],
+      pooHistory: null,
+      eatHistory: null,
     };
   }
 
@@ -41,6 +45,12 @@ class App extends Component {
     if (localStorage['lastEatTime']) {
       this.setState({
         lastEatTime: localStorage['lastEatTime'],
+      });
+    }
+
+    if (localStorage['peeHistory']) {
+      this.setState({
+        peeHistory: JSON.parse(localStorage['peeHistory']),
       });
     }
 
@@ -70,18 +80,70 @@ class App extends Component {
     }
   }
 
-  handleResetTimer(typeTime) {
-    const now = moment().utc();
-
+  handleTimerClick(typeTime) {
     if (typeTime === 'lastPeeTime') {
       this.setState({
-        lastPeeTime: now,
+        showPeeDialog: true,
       });
+    }
+
+    if (typeTime === 'lastPooTime') {
+      this.setState({
+        showPooDialog: true,
+      });
+    }
+
+    if (typeTime === 'lastEatTime') {
+      this.setState({
+        showEatDialog: true,
+      });
+    }
+  }
+
+  handleCancel() {
+    this.setState({
+      showPeeDialog: false,
+      showPooDialog: false,
+      showEatDialog: false,
+    });
+  }
+
+  handleResetTimer(typeTime, quality) {
+    const now = moment().utc();
+    const date = moment().format('MM-DD-YYYY');
+
+    // add history
+    const newMoment = [Date.now(), quality];
+    /*
+    const history = {
+      '11-29-81': [[199488393, true], [199488393, false]],
+    };*/
+
+    let historyArray = [];
+
+
+    if (typeTime === 'lastPeeTime') {
+      if (this.state.peeHistory.length > 0) {
+        historyArray = JSON.parse(this.state.peeHistory);
+        console.log('history', historyArray);
+      }
+
+      historyArray[date] = [];
+      historyArray[date].push(newMoment);
+      console.log(historyArray)
+
+      this.setState({
+        showPeeDialog: false,
+        lastPeeTime: now,
+        peeHistory: JSON.stringify(historyArray),
+      });
+
       localStorage.setItem('lastPeeTime', now);
     }
 
     if (typeTime === 'lastPooTime') {
       this.setState({
+        showPooDialog: false,
         lastPooTime: now,
       });
       localStorage.setItem('lastPooTime', now);
@@ -89,77 +151,78 @@ class App extends Component {
 
     if (typeTime === 'lastEatTime') {
       this.setState({
+        showEatDialog: false,
         lastEatTime: now,
       });
       localStorage.setItem('lastEatTime', now);
     }
   }
 
-  renderHelperText() {
-    return (
-      <div className="smallText">👆DOUBLE TAP TO RESET TIMER👆</div>
-    )
-  }
-
-  showHelperText(section) {
-    if (section === 'pee') {
-      this.setState({ peeHelperText: true });
-      setTimeout(() => {this.setState({peeHelperText: false})}, 2000)
-    }
-
-    if (section === 'poo') {
-      this.setState({ pooHelperText: true });
-      setTimeout(() => {this.setState({pooHelperText: false})}, 2000)
-    }
-
-    if (section === 'eat') {
-      this.setState({ eatHelperText: true });
-      setTimeout(() => {this.setState({eatHelperText: false})}, 2000)
-    }
-  }
-
   render() {
     return (
       <div className="Puppy">
-        <div
-          onClick={() => this.showHelperText('pee')}
-          onDoubleClick={() => this.handleResetTimer('lastPeeTime')}
-          className="section pee"
-        >
-          <span>💦 </span>
-          { this.state.peeTimeElapsed &&
-            this.state.peeTimeElapsed.format('HH:mm:ss')
-          }
-          {this.state.peeHelperText &&
-            this.renderHelperText()
-          }
-        </div>
-        <div
-          onClick={() => this.showHelperText('poo')}
-          onDoubleClick={() => this.handleResetTimer('lastPooTime')}
-          className="section poo"
-        >
-          <span>💩 </span>
-          { this.state.pooTimeElapsed &&
-            this.state.pooTimeElapsed.format('HH:mm:ss')
-          }
-          {this.state.pooHelperText &&
-            this.renderHelperText()
-          }
-        </div>
-        <div
-          onClick={() => this.showHelperText('eat')}
-          onDoubleClick={() => this.handleResetTimer('lastEatTime')}
-          className="section eat"
-        >
-          <span>🍜 </span>
-          { this.state.eatTimeElapsed &&
-            this.state.eatTimeElapsed.format('HH:mm:ss')
-          }
-          {this.state.eatHelperText &&
-            this.renderHelperText()
-          }
-        </div>
+        {!this.state.showPeeDialog &&
+          <div onClick={() => this.handleTimerClick('lastPeeTime')} className="section pee">
+            <span>💦 </span>
+            { this.state.peeTimeElapsed &&
+              this.state.peeTimeElapsed.format('HH:mm:ss')
+            }
+          </div>
+        }
+        {this.state.showPeeDialog &&
+          <div className="section pee">
+            <h5>Was it a good pee?</h5>
+            <div className="rating-icons">
+              <span onClick={() => this.handleResetTimer('lastPeeTime', true)}>👍</span>
+              <span onClick={() => this.handleResetTimer('lastPeeTime', false)}>👎</span>
+            </div>
+            <div>
+              <a className="cancel-link" onClick={this.handleCancel}>Cancel</a>
+            </div>
+          </div>
+        }
+
+        {!this.state.showPooDialog &&
+          <div onClick={() => this.handleTimerClick('lastPooTime')} className="section poo">
+            <span>💩 </span>
+            { this.state.pooTimeElapsed &&
+              this.state.pooTimeElapsed.format('HH:mm:ss')
+            }
+          </div>
+        }
+        {this.state.showPooDialog &&
+          <div className="section poo">
+            <h5>Was it a good poo?</h5>
+            <div className="rating-icons">
+              <span onClick={() => this.handleResetTimer('lastPooTime', true)}>👍</span>
+              <span onClick={() => this.handleResetTimer('lastPooTime', false)}>👎</span>
+            </div>
+            <div>
+              <a className="cancel-link" onClick={this.handleCancel}>Cancel</a>
+            </div>
+          </div>
+        }
+
+        {!this.state.showEatDialog &&
+          <div onClick={() => this.handleTimerClick('lastEatTime')} className="section eat">
+            <span>🍜 </span>
+            { this.state.eatTimeElapsed &&
+              this.state.eatTimeElapsed.format('HH:mm:ss')
+            }
+          </div>
+        }
+        {this.state.showEatDialog &&
+          <div className="section eat">
+            <h5>Was it a good meal?</h5>
+            <div className="rating-icons">
+              <span onClick={() => this.handleResetTimer('lastEatTime', true)}>👍</span>
+              <span onClick={() => this.handleResetTimer('lastEatTime', false)}>👎</span>
+            </div>
+            <div>
+              <a className="cancel-link" onClick={this.handleCancel}>Cancel</a>
+            </div>
+          </div>
+        }
       </div>
     );
   }
