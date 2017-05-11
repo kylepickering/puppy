@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import SwipeableViews from 'react-swipeable-views';
 
 import './App.css';
 
@@ -24,8 +25,8 @@ class App extends Component {
       showPooDialog: false,
       showEatDialog: false,
       peeHistory: [],
-      pooHistory: null,
-      eatHistory: null,
+      pooHistory: [],
+      eatHistory: [],
     };
   }
 
@@ -51,6 +52,18 @@ class App extends Component {
     if (localStorage['peeHistory']) {
       this.setState({
         peeHistory: JSON.parse(localStorage['peeHistory']),
+      });
+    }
+
+    if (localStorage['pooHistory']) {
+      this.setState({
+        pooHistory: JSON.parse(localStorage['pooHistory']),
+      });
+    }
+
+    if (localStorage['eatHistory']) {
+      this.setState({
+        eatHistory: JSON.parse(localStorage['eatHistory']),
       });
     }
 
@@ -111,118 +124,202 @@ class App extends Component {
   handleResetTimer(typeTime, quality) {
     const now = moment().utc();
     const date = moment().format('MM-DD-YYYY');
-
-    // add history
+    const yesterday = moment().subtract(1, 'day').format('MM-DD-YYYY');
     const newMoment = [Date.now(), quality];
-    /*
-    const history = {
-      '11-29-81': [[199488393, true], [199488393, false]],
-    };*/
 
     let historyArray = [];
 
-
     if (typeTime === 'lastPeeTime') {
-      if (this.state.peeHistory.length > 0) {
-        historyArray = JSON.parse(this.state.peeHistory);
-        console.log('history', historyArray);
+      historyArray = this.state.peeHistory;
+
+      if (Array.isArray(historyArray)) {
+        if (!Array.isArray(historyArray[date])) {
+          historyArray[date] = [];
+        }
+      } else {
+        historyArray = [];
       }
 
-      historyArray[date] = [];
       historyArray[date].push(newMoment);
-      console.log(historyArray)
 
       this.setState({
         showPeeDialog: false,
         lastPeeTime: now,
-        peeHistory: JSON.stringify(historyArray),
+        peeHistory: historyArray,
       });
 
       localStorage.setItem('lastPeeTime', now);
+      localStorage.setItem('peeHistory', JSON.stringify(historyArray));
+
     }
 
     if (typeTime === 'lastPooTime') {
+      historyArray = this.state.pooHistory;
+
+      if (Array.isArray(historyArray)) {
+        if (!Array.isArray(historyArray[date])) {
+          historyArray[date] = [];
+        }
+      } else {
+        historyArray = [];
+      }
+
+      historyArray[date].push(newMoment);
+
       this.setState({
         showPooDialog: false,
         lastPooTime: now,
+        pooHistory: historyArray,
       });
+
       localStorage.setItem('lastPooTime', now);
+      localStorage.setItem('pooHistory', JSON.stringify(historyArray));
     }
 
     if (typeTime === 'lastEatTime') {
+      historyArray = this.state.eatHistory;
+
+      if (Array.isArray(historyArray)) {
+        if (!Array.isArray(historyArray[date])) {
+          historyArray[date] = [];
+        }
+      } else {
+        historyArray = [];
+      }
+
+      historyArray[date].push(newMoment);
+
       this.setState({
         showEatDialog: false,
         lastEatTime: now,
+        eatHistory: historyArray,
       });
+
       localStorage.setItem('lastEatTime', now);
+      localStorage.setItem('eatHistory', JSON.stringify(historyArray));
     }
+  }
+
+  renderHistory(historyType) {
+    let history = [];
+    if (historyType === 'pee') {
+      history = this.state.peeHistory;
+    }
+
+    return (
+      <div className={`section ${historyType}`}>
+        <div>
+          <h5><span className="text-muted">Yesterday</span> & Today</h5>
+          {history.map(() => (
+            <div>
+              Hey
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   render() {
     return (
       <div className="Puppy">
-        {!this.state.showPeeDialog &&
-          <div onClick={() => this.handleTimerClick('lastPeeTime')} className="section pee">
-            <span>💦 </span>
-            { this.state.peeTimeElapsed &&
-              this.state.peeTimeElapsed.format('HH:mm:ss')
+        <SwipeableViews>
+          <div>
+            {!this.state.showPeeDialog &&
+              <div onClick={() => this.handleTimerClick('lastPeeTime')} className="section pee">
+                <div className="section-content timer">
+                  <span>💦 </span>
+                  { this.state.peeTimeElapsed &&
+                    this.state.peeTimeElapsed.format('HH:mm:ss')
+                  }
+                </div>
+              </div>
+            }
+            {this.state.showPeeDialog &&
+              <div className="section pee">
+                <div className="section-content timer">
+                  <h5>Was it a good pee?</h5>
+                  <div className="rating-icons">
+                    <span onClick={() => this.handleResetTimer('lastPeeTime', true)}>👍</span>
+                    <span onClick={() => this.handleResetTimer('lastPeeTime', false)}>👎</span>
+                  </div>
+                  <div>
+                    <a className="cancel-link" onClick={this.handleCancel}>Cancel</a>
+                  </div>
+                </div>
+              </div>
             }
           </div>
-        }
-        {this.state.showPeeDialog &&
-          <div className="section pee">
-            <h5>Was it a good pee?</h5>
-            <div className="rating-icons">
-              <span onClick={() => this.handleResetTimer('lastPeeTime', true)}>👍</span>
-              <span onClick={() => this.handleResetTimer('lastPeeTime', false)}>👎</span>
-            </div>
-            <div>
-              <a className="cancel-link" onClick={this.handleCancel}>Cancel</a>
-            </div>
-          </div>
-        }
 
-        {!this.state.showPooDialog &&
-          <div onClick={() => this.handleTimerClick('lastPooTime')} className="section poo">
-            <span>💩 </span>
-            { this.state.pooTimeElapsed &&
-              this.state.pooTimeElapsed.format('HH:mm:ss')
-            }
+          <div>
+            {this.renderHistory('pee')}
           </div>
-        }
-        {this.state.showPooDialog &&
-          <div className="section poo">
-            <h5>Was it a good poo?</h5>
-            <div className="rating-icons">
-              <span onClick={() => this.handleResetTimer('lastPooTime', true)}>👍</span>
-              <span onClick={() => this.handleResetTimer('lastPooTime', false)}>👎</span>
-            </div>
-            <div>
-              <a className="cancel-link" onClick={this.handleCancel}>Cancel</a>
-            </div>
-          </div>
-        }
+        </SwipeableViews>
 
-        {!this.state.showEatDialog &&
-          <div onClick={() => this.handleTimerClick('lastEatTime')} className="section eat">
-            <span>🍜 </span>
-            { this.state.eatTimeElapsed &&
-              this.state.eatTimeElapsed.format('HH:mm:ss')
+        <SwipeableViews>
+          <div>
+            {!this.state.showPooDialog &&
+              <div onClick={() => this.handleTimerClick('lastPooTime')} className="section poo">
+                <div className="section-content timer">
+                  <span>💩 </span>
+                  { this.state.pooTimeElapsed &&
+                    this.state.pooTimeElapsed.format('HH:mm:ss')
+                  }
+                </div>
+              </div>
+            }
+            {this.state.showPooDialog &&
+              <div className="section poo">
+                <div className="section-content timer">
+                  <h5>Was it a good poo?</h5>
+                  <div className="rating-icons">
+                    <span onClick={() => this.handleResetTimer('lastPooTime', true)}>👍</span>
+                    <span onClick={() => this.handleResetTimer('lastPooTime', false)}>👎</span>
+                  </div>
+                  <div>
+                    <a className="cancel-link" onClick={this.handleCancel}>Cancel</a>
+                  </div>
+                </div>
+              </div>
             }
           </div>
-        }
-        {this.state.showEatDialog &&
-          <div className="section eat">
-            <h5>Was it a good meal?</h5>
-            <div className="rating-icons">
-              <span onClick={() => this.handleResetTimer('lastEatTime', true)}>👍</span>
-              <span onClick={() => this.handleResetTimer('lastEatTime', false)}>👎</span>
-            </div>
-            <div>
-              <a className="cancel-link" onClick={this.handleCancel}>Cancel</a>
-            </div>
+
+          <div>
+            {this.renderHistory('poo')}
           </div>
-        }
+        </SwipeableViews>
+
+        <SwipeableViews>
+          <div>
+            {!this.state.showEatDialog &&
+              <div onClick={() => this.handleTimerClick('lastEatTime')} className="section eat">
+                <div className="section-content timer">
+                  <span>🍜 </span>
+                  { this.state.eatTimeElapsed &&
+                    this.state.eatTimeElapsed.format('HH:mm:ss')
+                  }
+                </div>
+              </div>
+            }
+            {this.state.showEatDialog &&
+              <div className="section eat">
+                <div className="section-content timer">
+                  <h5>Was it a good meal?</h5>
+                  <div className="rating-icons">
+                    <span onClick={() => this.handleResetTimer('lastEatTime', true)}>👍</span>
+                    <span onClick={() => this.handleResetTimer('lastEatTime', false)}>👎</span>
+                  </div>
+                  <div>
+                    <a className="cancel-link" onClick={this.handleCancel}>Cancel</a>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+          <div>
+            {this.renderHistory('eat')}
+          </div>
+        </SwipeableViews>
       </div>
     );
   }

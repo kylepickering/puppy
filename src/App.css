@@ -1,35 +1,44 @@
 h5 {
   font-size: 18px;
   line-height: 22px;
-  position: absolute;
-  width: 100%;
   text-align: center;
   text-transform: uppercase;
+  margin: 0 0 15px 0;
 }
 
 .cancel-link {
-  position: absolute;
   font-size: 14px;
   text-transform: uppercase;
   font-weight: bold;
-  line-height: 20px;
-  margin-top: -50px;
-  width: 100%;
+  margin-top: 15px;
   display: block;
   text-align: center;
 }
 
+.text-muted {
+  opacity: 0.6;
+}
+
 .rating-icons span {
   display: inline-block;
-  width: 40%;
+  width: 50%;
 }
 
 .section {
   height: 33.333333vh;
-  text-align: center;
-  line-height: 33vh;
-  font-size: 64px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-content {
+  min-width: 80%;
+  text-align: center;
+}
+
+.timer {
+  font-size: 64px;
 }
 
 .pee {
