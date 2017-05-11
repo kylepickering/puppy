@@ -24,9 +24,9 @@ class App extends Component {
       showPeeDialog: false,
       showPooDialog: false,
       showEatDialog: false,
-      peeHistory: [],
-      pooHistory: [],
-      eatHistory: [],
+      peeHistory: {},
+      pooHistory: {},
+      eatHistory: {},
     };
   }
 
@@ -124,97 +124,108 @@ class App extends Component {
   handleResetTimer(typeTime, quality) {
     const now = moment().utc();
     const date = moment().format('MM-DD-YYYY');
-    const yesterday = moment().subtract(1, 'day').format('MM-DD-YYYY');
-    const newMoment = [Date.now(), quality];
 
     let historyArray = [];
 
-    if (typeTime === 'lastPeeTime') {
-      historyArray = this.state.peeHistory;
+    let newMoment = {
+      'time': Date.now(),
+      'quality': quality,
+    };
 
-      if (Array.isArray(historyArray)) {
-        if (!Array.isArray(historyArray[date])) {
-          historyArray[date] = [];
-        }
-      } else {
-        historyArray = [];
+    let historyObject = {};
+
+    if (typeTime === 'lastPeeTime') {
+      historyObject = this.state.peeHistory;
+
+      if (!Array.isArray(historyObject[date])) {
+        historyObject[date] = [];
       }
 
-      historyArray[date].push(newMoment);
+      historyObject[date].push(newMoment);
 
       this.setState({
         showPeeDialog: false,
         lastPeeTime: now,
-        peeHistory: historyArray,
+        peeHistory: historyObject,
       });
 
       localStorage.setItem('lastPeeTime', now);
-      localStorage.setItem('peeHistory', JSON.stringify(historyArray));
+      localStorage.setItem('peeHistory', JSON.stringify(historyObject));
 
     }
 
     if (typeTime === 'lastPooTime') {
-      historyArray = this.state.pooHistory;
+      historyObject = this.state.pooHistory;
 
-      if (Array.isArray(historyArray)) {
-        if (!Array.isArray(historyArray[date])) {
-          historyArray[date] = [];
-        }
-      } else {
-        historyArray = [];
+      if (!Array.isArray(historyObject[date])) {
+        historyObject[date] = [];
       }
 
-      historyArray[date].push(newMoment);
+      historyObject[date].push(newMoment);
 
       this.setState({
         showPooDialog: false,
         lastPooTime: now,
-        pooHistory: historyArray,
+        pooHistory: historyObject,
       });
 
       localStorage.setItem('lastPooTime', now);
-      localStorage.setItem('pooHistory', JSON.stringify(historyArray));
+      localStorage.setItem('pooHistory', JSON.stringify(historyObject));
     }
 
     if (typeTime === 'lastEatTime') {
-      historyArray = this.state.eatHistory;
+      historyObject = this.state.eatHistory;
 
-      if (Array.isArray(historyArray)) {
-        if (!Array.isArray(historyArray[date])) {
-          historyArray[date] = [];
-        }
-      } else {
-        historyArray = [];
+      if (!Array.isArray(historyObject[date])) {
+        historyObject[date] = [];
       }
 
-      historyArray[date].push(newMoment);
+      historyObject[date].push(newMoment);
 
       this.setState({
         showEatDialog: false,
         lastEatTime: now,
-        eatHistory: historyArray,
+        eatHistory: historyObject,
       });
 
       localStorage.setItem('lastEatTime', now);
-      localStorage.setItem('eatHistory', JSON.stringify(historyArray));
+      localStorage.setItem('eatHistory', JSON.stringify(historyObject));
     }
   }
 
   renderHistory(historyType) {
-    let history = [];
+    const today = moment().format('MM-DD-YYYY');
+    const yesterday = moment().subtract(1, 'day').format('MM-DD-YYYY');
+
+    let history = {};
     if (historyType === 'pee') {
       history = this.state.peeHistory;
+    }
+    if (historyType === 'poo') {
+      history = this.state.pooHistory;
+    }
+    if (historyType === 'eat') {
+      history = this.state.eatHistory;
     }
 
     return (
       <div className={`section ${historyType}`}>
         <div>
           <h5><span className="text-muted">Yesterday</span> & Today</h5>
-          {history.map(() => (
-            <div>
-              Hey
-            </div>
-          ))}
+          <div style={{float: 'left'}} className="text-muted">
+            {Array.isArray(history[yesterday]) && history[yesterday].map((event, index) => (
+              <div key={index}>
+                {moment(event.time).format("h:mma")} was {event.quality ? 'good' : 'bad'}
+              </div>
+            ))}
+          </div>
+          <div style={{float: 'left'}}>
+            {Array.isArray(history[today]) && history[today].map((event, index) => (
+              <div key={index}>
+                {moment(event.time).format("h:mma")} was {event.quality ? 'good' : 'bad'}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
