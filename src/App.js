@@ -126,8 +126,6 @@ class App extends Component {
     const now = moment().utc();
     const date = moment().format('MM-DD-YYYY');
 
-    let historyArray = [];
-
     let newMoment = {
       'time': Date.now(),
       'quality': quality,
@@ -152,7 +150,6 @@ class App extends Component {
 
       localStorage.setItem('lastPeeTime', now);
       localStorage.setItem('peeHistory', JSON.stringify(historyObject));
-
     }
 
     if (typeTime === 'lastPooTime') {
@@ -259,7 +256,7 @@ class App extends Component {
           </div>
 
           <div>
-            {this.renderHistory('poo')}
+            <History data={this.state.pooHistory} historyType="poo" />
           </div>
         </SwipeableViews>
 
@@ -291,7 +288,7 @@ class App extends Component {
             }
           </div>
           <div>
-            {this.renderHistory('eat')}
+            <History data={this.state.eatHistory} historyType="eat" />
           </div>
         </SwipeableViews>
       </div>

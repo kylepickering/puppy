@@ -62,3 +62,43 @@ h5 {
   position: relative;
   margin-top: -30px;
 }
+
+.hours {
+  margin-top: 48px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.hour {
+  display: inline-block;
+  padding: 0 6px 0 0;
+}
+
+.pee .circle {
+  background-color: #887B0B;
+}
+
+.poo .circle {
+  background-color: #E5711E;
+}
+
+.eat .circle {
+  background-color: #106140;
+}
+
+.circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  position: absolute;
+  margin-top: -16px;
+  }
+  .circle.yesterday {
+    width: 4px;
+    opacity: 0.5;
+  }
+  .circle.false {
+    background-color: #FF5A5F;
+  }
+
+
