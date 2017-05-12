@@ -103,3 +103,11 @@ h5 {
   .circle.false {
     background-color: #FF5A5F;
   }
+
+.average {
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 32px;
+}

@@ -33,6 +33,44 @@ class History extends Component {
     )
   }
 
+  calculateAverage(yesterdayData, todayData) {
+    const durationBetweenEvents = []
+
+    if (Array.isArray(yesterdayData)) {
+      for (let i = 0; i < yesterdayData.length - 1; i++) {
+        let current = yesterdayData[i].time;
+        let next = moment(yesterdayData[i+1].time);
+
+        let duration = moment.duration(next.diff(current));
+        let hours = duration.asHours();
+
+        durationBetweenEvents.push(hours);
+      }
+    }
+
+
+    if (Array.isArray(todayData)) {
+      for (let i = 0; i < todayData.length - 1; i++) {
+        let current = todayData[i].time;
+        let next = moment(todayData[i+1].time);
+
+        let duration = moment.duration(next.diff(current));
+        let hours = duration.asHours();
+
+        durationBetweenEvents.push(hours);
+      }
+    }
+
+    let sum = 0;
+    for( let i = 0; i < durationBetweenEvents.length; i++ ){
+        sum += parseInt( durationBetweenEvents[i], 10 );
+    }
+
+    let avg = sum/durationBetweenEvents.length;
+
+    return avg;
+  }
+
   renderHour(hour24, hourData) {
     let hour12 = hour24 + 1;
     if (hour12 > 12) {
@@ -100,6 +138,9 @@ class History extends Component {
             <h5><span className="text-muted">Yesterday</span> + Today</h5>
             <div className="hours">
               {hours}
+            </div>
+            <div className="average text-muted">
+              ~{this.calculateAverage(data[yesterday], data[today])} hours between {historyType}s
             </div>
           </div>
         </div>
