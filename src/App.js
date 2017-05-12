@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import SwipeableViews from 'react-swipeable-views';
 
+import History from './History';
 import './App.css';
 
 class App extends Component {
@@ -193,44 +194,6 @@ class App extends Component {
     }
   }
 
-  renderHistory(historyType) {
-    const today = moment().format('MM-DD-YYYY');
-    const yesterday = moment().subtract(1, 'day').format('MM-DD-YYYY');
-
-    let history = {};
-    if (historyType === 'pee') {
-      history = this.state.peeHistory;
-    }
-    if (historyType === 'poo') {
-      history = this.state.pooHistory;
-    }
-    if (historyType === 'eat') {
-      history = this.state.eatHistory;
-    }
-
-    return (
-      <div className={`section ${historyType}`}>
-        <div>
-          <h5><span className="text-muted">Yesterday</span> & Today</h5>
-          <div style={{float: 'left'}} className="text-muted">
-            {Array.isArray(history[yesterday]) && history[yesterday].map((event, index) => (
-              <div key={index}>
-                {moment(event.time).format("h:mma")} was {event.quality ? 'good' : 'bad'}
-              </div>
-            ))}
-          </div>
-          <div style={{float: 'left'}}>
-            {Array.isArray(history[today]) && history[today].map((event, index) => (
-              <div key={index}>
-                {moment(event.time).format("h:mma")} was {event.quality ? 'good' : 'bad'}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   render() {
     return (
       <div className="Puppy">
@@ -263,7 +226,7 @@ class App extends Component {
           </div>
 
           <div>
-            {this.renderHistory('pee')}
+            <History data={this.state.peeHistory} historyType="pee" />
           </div>
         </SwipeableViews>
 
