@@ -97,7 +97,7 @@ class History extends Component {
       <div className="History">
         <div className={`section ${historyType}`}>
           <div>
-            <h5><span className="text-muted">Yesterday</span> & Today</h5>
+            <h5><span className="text-muted">Yesterday</span> + Today</h5>
             <div className="hours">
               {hours}
             </div>
@@ -109,18 +109,3 @@ class History extends Component {
 }
 
 export default History;
-
-/*
-{Array.isArray(history[today]) && history[today].map((event, index) => (
-  <div key={index}>
-    {moment(event.time).format("h:mma")} was {event.quality ? 'good' : 'bad'}
-  </div>
-))}
-
-{Array.isArray(history[yesterday]) && history[yesterday].map((event, index) => (
-  <div key={index}>
-    {moment(event.time).format("h:mma")} was {event.quality ? 'good' : 'bad'}
-  </div>
-))}
-
-*/

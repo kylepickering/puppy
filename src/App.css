@@ -87,19 +87,19 @@ h5 {
 }
 
 .circle {
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
   position: absolute;
   margin-top: -16px;
   }
   .circle.yesterday {
-    width: 4px;
-    opacity: 0.5;
-    margin-top: 24px;
+    width: 2px;
+    height: 8px;
+    border-radius: 0;
+    opacity: 0.6;
+    margin-top: -22px;
   }
   .circle.false {
     background-color: #FF5A5F;
   }
-
-
