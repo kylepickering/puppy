@@ -96,6 +96,7 @@ h5 {
   .circle.yesterday {
     width: 4px;
     opacity: 0.5;
+    margin-top: 24px;
   }
   .circle.false {
     background-color: #FF5A5F;
