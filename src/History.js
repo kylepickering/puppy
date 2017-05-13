@@ -132,7 +132,9 @@ class History extends Component {
     }
 
     const eventType = historyType === 'eat' ? 'meals' : historyType + 's';
-    const average = this.calculateAverage(data[yesterday], data[today]);
+    let average = this.calculateAverage(data[yesterday], data[today]);
+    average = Math.round(average * 10) / 10;
+
     const hoursLabel = average === 1 ? 'hour' : 'hours';
 
     return (
