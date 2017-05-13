@@ -131,6 +131,10 @@ class History extends Component {
       hours.push(this.renderHour(i, hourData));
     }
 
+    const eventType = historyType === 'eat' ? 'meals' : historyType + 's';
+    const average = this.calculateAverage(data[yesterday], data[today]);
+    const hoursLabel = average === 1 ? 'hour' : 'hours';
+
     return (
       <div className="History">
         <div className={`section ${historyType}`}>
@@ -139,9 +143,11 @@ class History extends Component {
             <div className="hours">
               {hours}
             </div>
-            <div className="average text-muted">
-              ~{this.calculateAverage(data[yesterday], data[today])} hours between {historyType}s
-            </div>
+            {!isNaN(average) &&
+              <div className="average text-muted">
+                ~{average} {hoursLabel} between {eventType}
+              </div>
+            }
           </div>
         </div>
       </div>

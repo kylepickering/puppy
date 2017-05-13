@@ -91,12 +91,11 @@ h5 {
   height: 7px;
   border-radius: 50%;
   position: absolute;
-  margin-top: -16px;
+  margin-top: -12px;
   }
   .circle.yesterday {
-    width: 2px;
-    height: 8px;
-    border-radius: 0;
+    width: 4px;
+    height: 4px;
     opacity: 0.6;
     margin-top: -22px;
   }
