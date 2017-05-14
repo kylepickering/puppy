@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import SwipeableViews from 'react-swipeable-views';
 
+import Timer from './Timer';
+import Rating from './Rating';
 import History from './History';
 import './App.css';
 
@@ -197,28 +199,20 @@ class App extends Component {
         <SwipeableViews>
           <div>
             {!this.state.showPeeDialog &&
-              <div onClick={() => this.handleTimerClick('lastPeeTime')} className="section pee">
-                <div className="section-content timer">
-                  <span>💦 </span>
-                  { this.state.peeTimeElapsed &&
-                    this.state.peeTimeElapsed.format('HH:mm:ss')
-                  }
-                </div>
-              </div>
+              <Timer
+                type="pee"
+                icon="💦"
+                timeElapsed={this.state.peeTimeElapsed}
+                onPress={() => this.handleTimerClick('lastPeeTime')}
+              />
             }
             {this.state.showPeeDialog &&
-              <div className="section pee">
-                <div className="section-content timer">
-                  <h5>Was it a good pee?</h5>
-                  <div className="rating-icons">
-                    <span onClick={() => this.handleResetTimer('lastPeeTime', true)}>👍</span>
-                    <span onClick={() => this.handleResetTimer('lastPeeTime', false)}>👎</span>
-                  </div>
-                  <div>
-                    <a className="cancel-link" onClick={this.handleCancel}>Cancel</a>
-                  </div>
-                </div>
-              </div>
+              <Rating
+                type="pee"
+                onGood={() => this.handleResetTimer('lastPeeTime', true)}
+                onBad={() => this.handleResetTimer('lastPeeTime', false)}
+                onCancel={this.handleCancel}
+              />
             }
           </div>
 
@@ -230,28 +224,20 @@ class App extends Component {
         <SwipeableViews>
           <div>
             {!this.state.showPooDialog &&
-              <div onClick={() => this.handleTimerClick('lastPooTime')} className="section poo">
-                <div className="section-content timer">
-                  <span>💩 </span>
-                  { this.state.pooTimeElapsed &&
-                    this.state.pooTimeElapsed.format('HH:mm:ss')
-                  }
-                </div>
-              </div>
+              <Timer
+                type="poo"
+                icon="💩"
+                timeElapsed={this.state.pooTimeElapsed}
+                onPress={() => this.handleTimerClick('lastPooTime')}
+              />
             }
             {this.state.showPooDialog &&
-              <div className="section poo">
-                <div className="section-content timer">
-                  <h5>Was it a good poo?</h5>
-                  <div className="rating-icons">
-                    <span onClick={() => this.handleResetTimer('lastPooTime', true)}>👍</span>
-                    <span onClick={() => this.handleResetTimer('lastPooTime', false)}>👎</span>
-                  </div>
-                  <div>
-                    <a className="cancel-link" onClick={this.handleCancel}>Cancel</a>
-                  </div>
-                </div>
-              </div>
+              <Rating
+                type="poo"
+                onGood={() => this.handleResetTimer('lastPooTime', true)}
+                onBad={() => this.handleResetTimer('lastPooTime', false)}
+                onCancel={this.handleCancel}
+              />
             }
           </div>
 
@@ -263,28 +249,21 @@ class App extends Component {
         <SwipeableViews>
           <div>
             {!this.state.showEatDialog &&
-              <div onClick={() => this.handleTimerClick('lastEatTime')} className="section eat">
-                <div className="section-content timer">
-                  <span>🍜 </span>
-                  { this.state.eatTimeElapsed &&
-                    this.state.eatTimeElapsed.format('HH:mm:ss')
-                  }
-                </div>
-              </div>
+              <Timer
+                type="eat"
+                icon="🍜"
+                timeElapsed={this.state.eatTimeElapsed}
+                onPress={() => this.handleTimerClick('lastEatTime')}
+              />
             }
             {this.state.showEatDialog &&
-              <div className="section eat">
-                <div className="section-content timer">
-                  <h5>Was it a good meal?</h5>
-                  <div className="rating-icons">
-                    <span onClick={() => this.handleResetTimer('lastEatTime', true)}>👍</span>
-                    <span onClick={() => this.handleResetTimer('lastEatTime', false)}>👎</span>
-                  </div>
-                  <div>
-                    <a className="cancel-link" onClick={this.handleCancel}>Cancel</a>
-                  </div>
-                </div>
-              </div>
+              <Rating
+                type="eat"
+                typeLabel="meal"
+                onGood={() => this.handleResetTimer('lastEatTime', true)}
+                onBad={() => this.handleResetTimer('lastEatTime', false)}
+                onCancel={this.handleCancel}
+              />
             }
           </div>
           <div>

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 
-import './App.css';
-
 class History extends Component {
 
   constructor(props) {
