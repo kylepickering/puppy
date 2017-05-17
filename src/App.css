@@ -73,7 +73,7 @@ h5 {
 
 .hour {
   display: inline-block;
-  width: 4.16666666%
+  width: 4%
 }
 
 .pee .circle, .pee .line {
@@ -90,7 +90,7 @@ h5 {
 
 .circleContainer {
   position: absolute;
-  width: 4.16666666%;
+  width: 4%;
   margin-top: -10px;
   margin-left: -3px;
 }
@@ -131,6 +131,7 @@ h5 {
 }
 .line.thick {
   width: 2px;
+  height: 3px;
 }
 
 .timeLabel {

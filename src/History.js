@@ -90,12 +90,30 @@ class History extends Component {
       }
     }
 
+    let showTimeLabel = false;
+    let showThickLine = false;
+    if (hour24 === 0 ||
+        hour24 === 3 ||
+        hour24 === 6 ||
+        hour24 === 9 ||
+        hour24 === 12 ||
+        hour24 === 15 ||
+        hour24 === 18 ||
+        hour24 === 21 ||
+        hour24 === 24)
+    {
+      showTimeLabel = true;
+      showThickLine = true;
+    }
+
     return (
       <span className="hour" key={hour24}>
         {circles}
         <span className="lineContainer">
-          <span className="line"></span>
-          <span className="timeLabel">{displayHour}</span>
+          <span className={showThickLine ? 'line thick' : 'line'}></span>
+          {showTimeLabel &&
+            <span className="timeLabel">{displayHour}</span>
+          }
         </span>
       </span>
     );
@@ -133,7 +151,7 @@ class History extends Component {
       });
     }
 
-    for (let i = 0; i < this.state.hours; i++) {
+    for (let i = 0; i <= this.state.hours; i++) {
       hours.push(this.renderHour(i, hourData));
     }
 
