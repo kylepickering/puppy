@@ -65,25 +65,34 @@ h5 {
 
 .hours {
   margin-top: 48px;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: bold;
+  width: 100%;
+  position: relative;
 }
 
 .hour {
   display: inline-block;
-  padding: 0 6px 0 0;
+  width: 4.16666666%
 }
 
-.pee .circle {
+.pee .circle, .pee .line {
   background-color: #887B0B;
 }
 
-.poo .circle {
+.poo .circle, .poo .line {
   background-color: #E5711E;
 }
 
-.eat .circle {
+.eat .circle, .eat .line {
   background-color: #106140;
+}
+
+.circleContainer {
+  position: absolute;
+  width: 4.16666666%;
+  margin-top: -10px;
+  margin-left: -3px;
 }
 
 .circle {
@@ -91,17 +100,51 @@ h5 {
   height: 7px;
   border-radius: 50%;
   position: absolute;
-  margin-top: -12px;
   }
   .circle.yesterday {
     width: 4px;
     height: 4px;
     opacity: 0.6;
-    margin-top: -22px;
+    margin-top: -10px;
   }
   .circle.false {
     background-color: #FF5A5F;
   }
+
+.lines {
+  width: 100%;
+}
+
+.lineContainer {
+  width: 2.074%;
+  display: inline-block;
+}
+
+.lineContainer:last-child {
+  width: auto;
+}
+
+.line {
+  height: 2px;
+  width: 1px;
+  display: block;
+}
+.line.thick {
+  width: 2px;
+}
+
+.timeLabel {
+  text-transform: uppercase;
+  display: inline-block;
+  font-size: 10px;
+  font-weight: normal;
+  position: absolute;
+  text-align: center;
+  margin-left: -5.5px;
+  margin-top: 2px;
+  width: 12px;
+  opacity: 0.5;
+}
 
 .average {
   font-size: 12px;

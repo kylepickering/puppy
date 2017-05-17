@@ -21,13 +21,15 @@ class History extends Component {
   renderCircle(day, quality, time) {
     let classes = `circle ${day} ${quality}`;
     const minute = moment(time).format('mm');
-
+    const percentageOfHour = (minute/60) * 100;
     const positionStyle = {
-      marginLeft: (minute/3.2) + 'px',
+      marginLeft: percentageOfHour + '%',
     };
 
     return (
-      <div className={classes} key={time} style={positionStyle} />
+      <div className="circleContainer">
+        <div className={classes} key={time} style={positionStyle} />
+      </div>
     )
   }
 
@@ -70,15 +72,18 @@ class History extends Component {
   }
 
   renderHour(hour24, hourData) {
-    let hour12 = hour24 + 1;
-    if (hour12 > 12) {
-      hour12 -= 12;
+    let displayHour = hour24;
+    if (displayHour > 12) {
+      displayHour -= 12;
+    }
+    if (displayHour === 0) {
+      displayHour = 12;
     }
 
     let circles = [];
 
     for (let index in hourData) {
-      if (Number(index - 1) === Number(hour24)) {
+      if (Number(index) === Number(hour24)) {
         for (let i in hourData[index]) {
           circles.push(this.renderCircle(hourData[index][i].day, hourData[index][i].event.quality, hourData[index][i].event.time));
         }
@@ -88,7 +93,11 @@ class History extends Component {
     return (
       <span className="hour" key={hour24}>
         {circles}
-        {hour12}
+        <span className="lineContainer">
+          <span className="line"></span>
+          <span className="timeLabel">{displayHour}</span>
+        </span>
+
       </span>
     );
   }
@@ -138,7 +147,7 @@ class History extends Component {
     return (
       <div className="History">
         <div className={`section ${historyType}`}>
-          <div>
+          <div style={{width: '90%'}}>
             <h5><span className="text-muted">Yesterday</span> + Today</h5>
             <div className="hours">
               {hours}
