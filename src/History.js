@@ -97,7 +97,6 @@ class History extends Component {
           <span className="line"></span>
           <span className="timeLabel">{displayHour}</span>
         </span>
-
       </span>
     );
   }
